@@ -32,9 +32,9 @@ class Agent:
         self.epsilon_prob = epsilon_prob
         self.time_step = 0
         self.last_action = None
-        self.count_action = np.zeros(number_arms)  # Count actions taken up to time t
-        self.reward_sum = np.zeros(number_arms)  # Sum number of rewards
-        self.value_estimates = np.zeros(number_arms)  # Action value estimates
+        self.count_action = np.zeros(number_arms)
+        self.reward_sum = np.zeros(number_arms)
+        self.value_estimates = np.zeros(number_arms)
 
     # Return string for graph legend
     @property
@@ -68,16 +68,16 @@ class Agent:
 
         at = self.last_action
         if flag == "sample-average":
-            self.reward_sum[at] += reward  # Add reward to sum array
-            self.count_action[at] += 1  # Add 1 to action selection
+            self.reward_sum[at] += reward
+            self.count_action[at] += 1
             # Calculate new action-value
             self.value_estimates[at] = self.reward_sum[at] / self.count_action[at]
         else:
             self.value_estimates[at] = self.value_estimates[at] + alpha * (
                     reward - self.value_estimates[at])
 
-            self.reward_sum[at] += reward  # Add reward to sum array
-            self.count_action[at] += 1  # Add 1 to action selection
+            self.reward_sum[at] += reward
+            self.count_action[at] += 1
 
         # Increase time step
         self.time_step += 1
@@ -87,7 +87,7 @@ class Agent:
         self.time_step = 0
         self.last_action = None
 
-        self.count_action[:] = 0  # Count of actions taken at time t
+        self.count_action[:] = 0
         self.reward_sum[:] = 0
         self.value_estimates[:] = 0  # Action value estimates Qt ~= Q*(a)
 
@@ -130,7 +130,6 @@ class Environment:
                 for agent in self.agents:
                     action_T = agent.action()
 
-                    # Reward - normal dist (Q*(at), variance = 1)
                     reward_T = np.random.normal(self.testbed.action_values[action_T], scale=1)
 
                     # Agent checks state
